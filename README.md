@@ -2,6 +2,9 @@
 
 Hello
 
+<<<<<<< HEAD
 ukl dsa
 
 confli 
+=======
+

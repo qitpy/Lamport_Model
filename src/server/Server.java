@@ -179,14 +179,20 @@ public class Server extends JFrame {
 							if (!ttf_ServerInfoPort.getText().equals(""))
 							{
 								btn_MessageToServer1.setEnabled(true);
-							}
-							
+							}					
 						}
 						else if (btn_MessageToServer2.getText().equals("Server 2") && !btn_MessageToServer1.getText().equals("Port " + port)) {
 							btn_MessageToServer2.setText("Port " + port);
 							if (!ttf_ServerInfoPort.getText().equals(""))
 							{
 								btn_MessageToServer2.setEnabled(true);
+							}	
+						}
+						else if (btn_MessageToServer3.getText().equals("Server 3") && !btn_MessageToServer2.getText().equals("Port " + port)) {
+							btn_MessageToServer3.setText("Port " + port);
+							if (!ttf_ServerInfoPort.getText().equals(""))
+							{
+								btn_MessageToServer3.setEnabled(true);
 							}	
 						}
 					}
@@ -206,6 +212,9 @@ public class Server extends JFrame {
 					core.init();
 					btn_MessageToLocal.setEnabled(true);
 					
+					if (!btn_MessageToServer3.getText().equals("Server 3")) {
+						btn_MessageToServer2.setEnabled(true);
+					}
 					if (!btn_MessageToServer2.getText().equals("Server 2")) {
 						btn_MessageToServer2.setEnabled(true);
 					}
@@ -255,7 +264,17 @@ public class Server extends JFrame {
 		
 		btn_MessageToServer3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				try {
+					int port = Integer.parseInt(btn_MessageToServer3.getText().substring(5));
+					int logicClock = getLogicClock();
+					deliverTo("localhost", port, logicClock);
+					increaseLogic();
+					setNextLogicClock(logicNum);
+					addEventToMessageEvent("SEND", port);
+				} catch (RemoteException | MalformedURLException | NotBoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		
@@ -278,36 +297,39 @@ public class Server extends JFrame {
 	
 	void declareVar() {
 		lb_Start = new JPanel();
+		
 		panel_ListServer = new JPanel();
 		panel_ServerInfo = new JPanel();
 		panel_MessageTo = new JPanel();
 		panel_MessageTo.setPreferredSize(new Dimension(0, 0));
 		panel_MessageEvent = new JPanel();
 		panel_LogicClock = new JPanel();
+		
 		scrollPane_1 = new JScrollPane();
 		list_MessageEvent = new JList<String>();
 		scrollPane = new JScrollPane();
 		list_LogicClock = new List();
 		list_LogicClock.setPreferredSize(new Dimension(10, 10));
+		
 		lb_ServerInfoIP = new JLabel("IP Address");
 		lb_ServerInfoHostname = new JLabel("Hostname");
 		lb_ServerInfoPort = new JLabel("Port");
+		
 		btn_MessageToServer2 = new JButton("Server 2");
 		btn_MessageToServer2.setEnabled(false);
 		btn_MessageToServer1 = new JButton("Server 1");
 		btn_MessageToServer1.setEnabled(false);
-		
-		btn_MessageToServer3 = new JButton("Selected");
+		btn_MessageToServer3 = new JButton("Server 3");
 		btn_MessageToServer3.setEnabled(false);
-		
 		btn_MessageToLocal = new JButton("Local");
 		btn_MessageToLocal.setEnabled(false);
 		
 		lb_StartHostname = new JLabel("Hostname");
 		lb_StartPort = new JLabel("Port");
-		btn_StartLookup = new JButton("Lookup");
 		
+		btn_StartLookup = new JButton("Lookup");
 		btn_StartInit = new JButton("Init");
+		
 		cbBox_StartHostname = new JComboBox<String>();
 		cbBox_StartPort = new JComboBox<String>();
 	}
@@ -434,8 +456,7 @@ public class Server extends JFrame {
 		panel_MessageTo.setLayout(null);
 		
 		btn_MessageToServer2.setForeground(new Color(255, 255, 255));
-		btn_MessageToServer2.setBackground(new Color(51, 51, 51));
-		
+		btn_MessageToServer2.setBackground(new Color(51, 51, 51));		
 		btn_MessageToServer2.setBounds(45, 84, 117, 25);
 		panel_MessageTo.add(btn_MessageToServer2);
 		
